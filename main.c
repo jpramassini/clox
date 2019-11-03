@@ -18,6 +18,8 @@ int main(int argc, const char* argv[]){
     writeChunk(&chunk, other_constant, 124);
     writeChunk(&chunk, OP_NEGATE, 124);
 
+    writeChunk(&chunk, OP_ADD, 125);
+
     writeChunk(&chunk, OP_RETURN, 124);
 
     disassembleChunk(&chunk, "test chunk");

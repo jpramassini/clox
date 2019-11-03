@@ -42,6 +42,17 @@ static InterpretResult run() {
 #define READ_BYTE() (*vm.ip++)  // Dereference current ip and then increment.
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])  // If a constant instruction, the next byte will be
                                                                     // the address of the constant, so go grab it.
+
+    // Using a do while for this allows us to use semicolons when calling this freely.
+    // NOTE: The "backwards assignment" to 'b' first is purposeful. This means the first operand read will go to 'a',
+    // and the second to 'b'.
+#define BINARY_OP(op) \
+    do { \
+        double b = pop(); \
+        double a = pop(); \
+        push(a op b); \
+    } while(false)
+
     for(;;){
 #ifdef DEBUG_TRACE_EXECUTION
         printf("          ");
@@ -62,6 +73,10 @@ static InterpretResult run() {
                 printf("\n");
                 break;
             }
+            case OP_ADD:        BINARY_OP(+); break;
+            case OP_SUBTRACT:   BINARY_OP(-); break;
+            case OP_MULTIPLY:   BINARY_OP(*); break;
+            case OP_DIVIDE:     BINARY_OP(/); break;
             case OP_NEGATE: {
                 push(-pop());   // Grab the value on the stack and push back the negated version.
                 break;
@@ -73,9 +88,9 @@ static InterpretResult run() {
             }
         }
     }
-
 #undef READ_CONSTANT
 #undef READ_BYTE
+#undef BINARY_OP
 }
 
 InterpretResult interpret(Chunk* chunk) {
