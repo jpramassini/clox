@@ -40,10 +40,12 @@ int disassembleInstruction(Chunk* chunk, int offset){
 
     uint8_t instruction = chunk->code[offset];  // Grab the opcode at the offset.
     switch(instruction) {
-        case OP_RETURN:
-            return simpleInstruction("OP_RETURN", offset);
         case OP_CONSTANT:
             return constantInstruction("OP_CONSTANT", chunk, offset);
+        case OP_NEGATE:
+            return simpleInstruction("OP_NEGATE", offset);
+        case OP_RETURN:
+            return simpleInstruction("OP_RETURN", offset);
         default:
             // This isn't a recognized opcode, likely an interpreter error.
             printf("Unknown opcode %d\n", instruction);
