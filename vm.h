@@ -26,7 +26,7 @@ typedef enum {
 
 void initVM();
 void freeVM();
-InterpretResult interpret(Chunk* chunk);    // NOTE: This is the main entrypoint to VM
+InterpretResult interpret(const char* source);    // NOTE: This is the main entrypoint to VM
 void push(Value value);
 Value pop();
 
